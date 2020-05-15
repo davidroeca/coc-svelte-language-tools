@@ -2,12 +2,12 @@
     "name": "coc-svelte-language-tools",
     "version": "0.1.0",
     "description": "Svelte language support for COC",
-    "main": "dist/src/extension.js",
+    "main": "lib/src/extension.js",
     "scripts": {
-        "vscode:prepublish": "tsc -p ./",
+        "clean": "rimraf lib",
         "build": "tsc -p ./",
         "watch": "tsc -w -p ./",
-        "test": "echo 'NOOP'"
+        "prepare": "npm-run-all clean build"
     },
     "repository": {
         "type": "git",
@@ -227,8 +227,11 @@
     },
     "devDependencies": {
         "@types/node": "^14.0.1",
+        "coc.nvim": "^0.0.77",
+        "npm-run-all": "^4.1.5",
+        "rimraf": "^3.0.2",
         "svelte-language-server": "^0.10.13",
         "typescript": "*",
-        "vscode-languageserver-protocol": "^3.15.3"
+        "vscode-languageserver-protocol": "^3.16.0-next.2"
     }
 }
