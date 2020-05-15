@@ -1,0 +1,249 @@
+{
+    "name": "svelte-vscode",
+    "version": "0.5.0",
+    "description": "Svelte language support for VS Code",
+    "main": "dist/src/extension.js",
+    "scripts": {
+        "vscode:prepublish": "tsc -p ./",
+        "build": "tsc -p ./",
+        "watch": "tsc -w -p ./",
+        "test": "echo 'NOOP'",
+        "update:package:beta": "node scripts/bump-beta-version.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/sveltejs/language-tools.git"
+    },
+    "keywords": [
+        "svelte",
+        "vscode"
+    ],
+    "author": "James Birtles <jameshbirtles@gmail.com> & the Svelte Core Team",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/sveltejs/language-tools/issues"
+    },
+    "homepage": "https://github.com/sveltejs/language-tools#readme",
+    "displayName": "Svelte Beta",
+    "publisher": "svelte",
+    "icon": "icons/logo.png",
+    "galleryBanner": {
+        "color": "#FF3E00",
+        "theme": "dark"
+    },
+    "categories": [
+        "Programming Languages",
+        "Formatters"
+    ],
+    "engines": {
+        "vscode": "^1.30.0"
+    },
+    "activationEvents": [
+        "onLanguage:svelte",
+        "onCommand:svelte.restartLanguageServer"
+    ],
+    "contributes": {
+        "configuration": {
+            "type": "object",
+            "title": "Svelte",
+            "properties": {
+                "svelte.language-server.runtime": {
+                    "type": "string",
+                    "title": "Language Server Runtime",
+                    "description": "Path to the node executable to use to spawn the language server"
+                },
+                "svelte.plugin.typescript.enable": {
+                    "type": "boolean",
+                    "default": true,
+                    "title": "TypeScript",
+                    "description": "Enable the TypeScript plugin"
+                },
+                "svelte.plugin.typescript.diagnostics.enable": {
+                    "type": "boolean",
+                    "default": true,
+                    "title": "TypeScript: Diagnostics",
+                    "description": "Enable diagnostic messages for TypeScript"
+                },
+                "svelte.plugin.typescript.hover.enable": {
+                    "type": "boolean",
+                    "default": true,
+                    "title": "TypeScript: Hover Info",
+                    "description": "Enable hover info for TypeScript"
+                },
+                "svelte.plugin.typescript.documentSymbols.enable": {
+                    "type": "boolean",
+                    "default": true,
+                    "title": "TypeScript: Symbols in Outline",
+                    "description": "Enable document symbols for TypeScript"
+                },
+                "svelte.plugin.typescript.completions.enable": {
+                    "type": "boolean",
+                    "default": true,
+                    "title": "TypeScript: Completions",
+                    "description": "Enable completions for TypeScript"
+                },
+                "svelte.plugin.typescript.definitions.enable": {
+                    "type": "boolean",
+                    "default": true,
+                    "title": "TypeScript: Go to Definition",
+                    "description": "Enable go to definition for TypeScript"
+                },
+                "svelte.plugin.typescript.codeActions.enable": {
+                    "type": "boolean",
+                    "default": true,
+                    "title": "TypeScript: Code Actions",
+                    "description": "Enable code actions for TypeScript"
+                },
+                "svelte.plugin.css.enable": {
+                    "type": "boolean",
+                    "default": true,
+                    "title": "CSS",
+                    "description": "Enable the CSS plugin"
+                },
+                "svelte.plugin.css.diagnostics.enable": {
+                    "type": "boolean",
+                    "default": true,
+                    "title": "CSS: Diagnostics",
+                    "description": "Enable diagnostic messages for CSS"
+                },
+                "svelte.plugin.css.hover.enable": {
+                    "type": "boolean",
+                    "default": true,
+                    "title": "CSS: Hover Info",
+                    "description": "Enable hover info for CSS"
+                },
+                "svelte.plugin.css.completions.enable": {
+                    "type": "boolean",
+                    "default": true,
+                    "title": "CSS: Auto Complete",
+                    "description": "Enable auto completions for CSS"
+                },
+                "svelte.plugin.css.documentColors.enable": {
+                    "type": "boolean",
+                    "default": true,
+                    "title": "CSS: Document Colors",
+                    "description": "Enable document colors for CSS"
+                },
+                "svelte.plugin.css.colorPresentations.enable": {
+                    "type": "boolean",
+                    "default": true,
+                    "title": "CSS: Color Picker",
+                    "description": "Enable color picker for CSS"
+                },
+                "svelte.plugin.css.documentSymbols.enable": {
+                    "type": "boolean",
+                    "default": true,
+                    "title": "CSS: Symbols in Outline",
+                    "description": "Enable document symbols for CSS"
+                },
+                "svelte.plugin.html.enable": {
+                    "type": "boolean",
+                    "default": true,
+                    "title": "HTML",
+                    "description": "Enable the HTML plugin"
+                },
+                "svelte.plugin.html.hover.enable": {
+                    "type": "boolean",
+                    "default": true,
+                    "title": "HTML: Hover Info",
+                    "description": "Enable hover info for HTML"
+                },
+                "svelte.plugin.html.completions.enable": {
+                    "type": "boolean",
+                    "default": true,
+                    "title": "HTML: Auto Complete",
+                    "description": "Enable auto completions for HTML"
+                },
+                "svelte.plugin.html.tagComplete.enable": {
+                    "type": "boolean",
+                    "default": true,
+                    "title": "HTML: Tag Auto Closing",
+                    "description": "Enable HTML tag auto closing"
+                },
+                "svelte.plugin.html.documentSymbols.enable": {
+                    "type": "boolean",
+                    "default": true,
+                    "title": "HTML: Symbols in Outline",
+                    "description": "Enable document symbols for HTML"
+                },
+                "svelte.plugin.svelte.enable": {
+                    "type": "boolean",
+                    "default": true,
+                    "title": "Svelte",
+                    "description": "Enable the Svelte plugin"
+                },
+                "svelte.plugin.svelte.diagnostics.enable": {
+                    "type": "boolean",
+                    "default": true,
+                    "title": "Svelte: Diagnostics",
+                    "description": "Enable diagnostic messages for Svelte"
+                },
+                "svelte.plugin.svelte.format.enable": {
+                    "type": "boolean",
+                    "default": true,
+                    "title": "Svelte: Format",
+                    "description": "Enable formatting for Svelte (includes css & js)"
+                },
+                "svelte.plugin.svelte.completions.enable": {
+                    "type": "boolean",
+                    "default": true,
+                    "title": "Svelte: Completions",
+                    "description": "Enable auto completions for Svelte"
+                },
+                "svelte.plugin.svelte.hover.enable": {
+                    "type": "boolean",
+                    "default": true,
+                    "title": "Svelte: Hover",
+                    "description": "Enable hover information for Svelte"
+                }
+            }
+        },
+        "languages": [
+            {
+                "id": "svelte",
+                "aliases": [
+                    "Svelte",
+                    "svelte"
+                ],
+                "extensions": [
+                    ".svelte"
+                ],
+                "configuration": "./language-configuration.json"
+            }
+        ],
+        "grammars": [
+            {
+                "language": "svelte",
+                "scopeName": "source.svelte",
+                "path": "./syntaxes/svelte.tmLanguage.json",
+                "embeddedLanguages": {
+                    "text.html": "html",
+                    "source.css": "css",
+                    "source.css.scss": "scss",
+                    "source.js": "javascript",
+                    "source.ts": "typescript"
+                }
+            }
+        ],
+        "commands": [
+            {
+                "command": "svelte.restartLanguageServer",
+                "title": "Svelte: Restart Language Server"
+            }
+        ],
+        "breakpoints": [
+            {
+                "language": "svelte"
+            }
+        ]
+    },
+    "devDependencies": {
+        "@types/node": "^13.9.0",
+        "typescript": "*",
+        "@types/vscode": "*"
+    },
+    "dependencies": {
+        "svelte-language-server": "*",
+        "vscode-languageclient": "^6.1.1"
+    }
+}
