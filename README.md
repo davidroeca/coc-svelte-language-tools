@@ -1,6 +1,6 @@
-# Svelte for VS Code
+# Svelte for CoC.nvim
 
-Provides syntax highlighting and rich intellisense for Svelte components in VS Code, utilising the [svelte language server](../language-server).
+Provides syntax highlighting and rich intellisense for Svelte components in CoC, utilising the [svelte language server](https://github.com/sveltejs/language-tools/blob/master/packages/language-server).
 
 ## Features
 
@@ -39,7 +39,7 @@ Provides syntax highlighting and rich intellisense for Svelte components in VS C
 
 #### Generic setup
 
-If a svelte file contains some language other than `html`, `css` or `javascript`, `svelte-vscode` needs to know how to [preprocess](https://svelte.dev/docs#svelte_preprocess) it. This can be achieved by creating a `svelte.config.js` file at the root of your project which exports a svelte options object (similar to `svelte-loader` and `rollup-plugin-svelte`).
+If a svelte file contains some language other than `html`, `css` or `javascript`, `coc-svelte-language-tools` needs to know how to [preprocess](https://svelte.dev/docs#svelte_preprocess) it. This can be achieved by creating a `svelte.config.js` file at the root of your project which exports a svelte options object (similar to `svelte-loader` and `rollup-plugin-svelte`).
 
 ```js
 // svelte.config.js
