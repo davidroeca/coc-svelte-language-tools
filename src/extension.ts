@@ -1,20 +1,15 @@
-import { workspace, ExtensionContext, TextDocument, Position, commands, window } from 'vscode';
 import {
+    workspace,
+    ExtensionContext,
     LanguageClient,
     LanguageClientOptions,
     ServerOptions,
     TransportKind,
-    TextDocumentPositionParams,
-    RequestType,
     RevealOutputChannelOn,
-} from 'vscode-languageclient';
+    commands,
+} from 'coc.nvim';
+import { TextDocument, Position, TextDocumentPositionParams } from 'vscode-languageserver-protocol';
 import { activateTagClosing } from './html/autoClose';
-
-namespace TagCloseRequest {
-    export const type: RequestType<TextDocumentPositionParams, string, any, any> = new RequestType(
-        'html/tag',
-    );
-}
 
 export function activate(context: ExtensionContext) {
     const serverModule = require.resolve('svelte-language-server/bin/server.js');
@@ -39,7 +34,7 @@ export function activate(context: ExtensionContext) {
         revealOutputChannelOn: RevealOutputChannelOn.Never,
         synchronize: {
             configurationSection: ['svelte'],
-            fileEvents: workspace.createFileSystemWatcher('{**/*.js,**/*.ts}', false, false, false)
+            fileEvents: workspace.createFileSystemWatcher('{**/*.js,**/*.ts}', false, false, false),
         },
         initializationOptions: { config: workspace.getConfiguration('svelte.plugin') },
     };
@@ -49,13 +44,17 @@ export function activate(context: ExtensionContext) {
 
     ls.onReady().then(() => {
         const tagRequestor = (document: TextDocument, position: Position) => {
-            const param = ls.code2ProtocolConverter.asTextDocumentPositionParams(
-                document,
-                position
-            );
-            return ls.sendRequest(TagCloseRequest.type, param);
+            const param: TextDocumentPositionParams = {
+                textDocument: { uri: document.uri },
+                position,
+            };
+            return ls.sendRequest<string>('html/tag', param);
         };
-        const disposable = activateTagClosing(tagRequestor, { svelte: true }, 'html.autoClosingTags');
+        const disposable = activateTagClosing(
+            tagRequestor,
+            { svelte: true },
+            'html.autoClosingTags',
+        );
         context.subscriptions.push(disposable);
     });
 
@@ -65,7 +64,7 @@ export function activate(context: ExtensionContext) {
             ls = createLanguageServer(serverOptions, clientOptions);
             context.subscriptions.push(ls.start());
             await ls.onReady();
-            window.showInformationMessage('Svelte language server restarted.');
+            workspace.showMessage('Svelte language server restarted.');
         }),
     );
 }

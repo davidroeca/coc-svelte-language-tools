@@ -6,16 +6,13 @@
  *--------------------------------------------------------------------------------------------*/
 'use strict';
 
+import { workspace, Disposable, snippetManager } from 'coc.nvim';
+
 import {
-    window,
-    workspace,
-    Disposable,
     TextDocument,
     Position,
-    SnippetString,
-} from 'vscode';
-
-import { TextDocumentContentChangeEvent } from "vscode-languageserver-protocol";
+    TextDocumentContentChangeEvent,
+} from 'vscode-languageserver-protocol';
 
 export function activateTagClosing(
     tagProvider: (document: TextDocument, position: Position) => Thenable<string>,
@@ -24,24 +21,28 @@ export function activateTagClosing(
 ): Disposable {
     const disposables: Disposable[] = [];
     workspace.onDidChangeTextDocument(
-        event => onDidChangeTextDocument(event.document, event.contentChanges),
+        (event) => {
+            const editor = workspace.getDocument(event.textDocument.uri);
+            if (editor) {
+                onDidChangeTextDocument(editor.textDocument, event.contentChanges);
+            }
+        },
         null,
         disposables,
     );
 
     let isEnabled = false;
     updateEnabledState();
-    window.onDidChangeActiveTextEditor(updateEnabledState, null, disposables);
 
     let timeout: NodeJS.Timer | undefined = void 0;
 
-    function updateEnabledState() {
+    async function updateEnabledState() {
         isEnabled = false;
-        const editor = window.activeTextEditor;
+        const editor = await workspace.document;
         if (!editor) {
             return;
         }
-        const document = editor.document;
+        const document = editor.textDocument;
         if (!supportedLanguages[document.languageId]) {
             return;
         }
@@ -51,14 +52,15 @@ export function activateTagClosing(
         isEnabled = true;
     }
 
-    function onDidChangeTextDocument(
+    async function onDidChangeTextDocument(
         document: TextDocument,
         changes: readonly TextDocumentContentChangeEvent[],
     ) {
         if (!isEnabled) {
             return;
         }
-        const activeDocument = window.activeTextEditor && window.activeTextEditor.document;
+        const activeEditor = await workspace.document;
+        const activeDocument = activeEditor?.textDocument;
         if (document !== activeDocument || changes.length === 0) {
             return;
         }
@@ -67,40 +69,43 @@ export function activateTagClosing(
         }
         const lastChange = changes[changes.length - 1];
         const lastCharacter = lastChange.text[lastChange.text.length - 1];
-        if ("range" in lastChange && (lastChange.rangeLength ?? 0) > 0 || (lastCharacter !== '>' && lastCharacter !== '/')) {
+        if (
+            ('range' in lastChange && (lastChange.rangeLength ?? 0) > 0) ||
+            (lastCharacter !== '>' && lastCharacter !== '/')
+        ) {
             return;
         }
-        const rangeStart = "range" in lastChange ? lastChange.range.start : new Position(0, document.getText().length);
+        const rangeStart =
+            'range' in lastChange
+                ? lastChange.range.start
+                : Position.create(0, document.getText().length);
         const version = document.version;
-        timeout = setTimeout(() => {
-            const position = new Position(
+        timeout = setTimeout(async () => {
+            const position = Position.create(
                 rangeStart.line,
                 rangeStart.character + lastChange.text.length,
             );
-            tagProvider(document, position).then(text => {
-                if (text && isEnabled) {
-                    const activeEditor = window.activeTextEditor;
-                    if (activeEditor) {
-                        const activeDocument = activeEditor.document;
-                        if (document === activeDocument && activeDocument.version === version) {
-                            const selections = activeEditor.selections;
-                            if (
-                                selections.length &&
-                                selections.some(s => s.active.isEqual(position))
-                            ) {
-                                activeEditor.insertSnippet(
-                                    new SnippetString(text),
-                                    selections.map(s => s.active),
-                                );
-                            } else {
-                                activeEditor.insertSnippet(new SnippetString(text), position);
-                            }
-                        }
+            const text = await tagProvider(document, position);
+            if (text && isEnabled) {
+                const activeEditor = await workspace.document;
+                if (activeEditor) {
+                    const activeDocument = activeEditor.textDocument;
+                    if (document === activeDocument && activeDocument.version === version) {
+                        snippetManager.insertSnippet(text, false, {
+                            start: position,
+                            end: Position.create(position.line, position.character),
+                        });
                     }
                 }
-            });
+            }
             timeout = void 0;
         }, 100);
     }
-    return Disposable.from(...disposables);
+    return {
+        dispose: () => {
+            disposables.forEach((disposable) => {
+                disposable.dispose();
+            });
+        },
+    };
 }
