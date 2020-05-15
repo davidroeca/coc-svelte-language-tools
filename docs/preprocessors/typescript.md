@@ -51,6 +51,6 @@ module.exports = {
 
 ##### Restart the svelte language server
 
-You will need to tell svelte-vscode to restart the svelte language server in order to pick up the new configuration.
+You will need to tell coc-svelte-language-tools to restart the svelte language server in order to pick up the new configuration.
 
 Hit `ctrl-shift-p` or `cmd-shift-p` on mac, type `svelte restart`, and select `Svelte: Restart Language Server`. Any errors you were seeing should now go away and you're now all set up!
