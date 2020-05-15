@@ -56,6 +56,7 @@ export function activate(context: ExtensionContext) {
             'html.autoClosingTags',
         );
         context.subscriptions.push(disposable);
+        workspace.showMessage('Svelte language server now active.');
     });
 
     context.subscriptions.push(
