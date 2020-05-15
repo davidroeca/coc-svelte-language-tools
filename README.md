@@ -1,5 +1,7 @@
 # Svelte for CoC.nvim
 
+⚠️ _Warning_: This is currently in development, and may not work appropriately yet. Proceed at your own risk.
+
 Provides syntax highlighting and rich intellisense for Svelte components in CoC, utilising the [svelte language server](https://github.com/sveltejs/language-tools/blob/master/packages/language-server).
 
 ## Features
