@@ -1,42 +1,30 @@
 {
-    "name": "svelte-vscode",
-    "version": "0.5.0",
-    "description": "Svelte language support for VS Code",
+    "name": "coc-svelte-language-tools",
+    "version": "0.1.0",
+    "description": "Svelte language support for COC",
     "main": "dist/src/extension.js",
     "scripts": {
         "vscode:prepublish": "tsc -p ./",
         "build": "tsc -p ./",
         "watch": "tsc -w -p ./",
-        "test": "echo 'NOOP'",
-        "update:package:beta": "node scripts/bump-beta-version.js"
+        "test": "echo 'NOOP'"
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/sveltejs/language-tools.git"
+        "url": "https://github.com/davidroeca/coc-svelte-language-tools.git"
     },
     "keywords": [
         "svelte",
-        "vscode"
+        "coc.nvim"
     ],
-    "author": "James Birtles <jameshbirtles@gmail.com> & the Svelte Core Team",
+    "author": "David Roeca <david.roeca@gmail.com>",
     "license": "MIT",
     "bugs": {
-        "url": "https://github.com/sveltejs/language-tools/issues"
+        "url": "https://github.com/davidroeca/coc-svelte-language-tools/issues"
     },
-    "homepage": "https://github.com/sveltejs/language-tools#readme",
-    "displayName": "Svelte Beta",
-    "publisher": "svelte",
-    "icon": "icons/logo.png",
-    "galleryBanner": {
-        "color": "#FF3E00",
-        "theme": "dark"
-    },
-    "categories": [
-        "Programming Languages",
-        "Formatters"
-    ],
+    "homepage": "https://github.com/davidroeca/coc-svelte-language-tools#readme",
     "engines": {
-        "vscode": "^1.30.0"
+        "coc": "^0.0.78"
     },
     "activationEvents": [
         "onLanguage:svelte",
@@ -238,12 +226,9 @@
         ]
     },
     "devDependencies": {
-        "@types/node": "^13.9.0",
+        "@types/node": "^14.0.1",
+        "svelte-language-server": "^0.10.13",
         "typescript": "*",
-        "@types/vscode": "*"
-    },
-    "dependencies": {
-        "svelte-language-server": "*",
-        "vscode-languageclient": "^6.1.1"
+        "vscode-languageserver-protocol": "^3.15.3"
     }
 }
