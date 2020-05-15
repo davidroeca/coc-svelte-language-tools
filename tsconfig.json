@@ -1,6 +1,5 @@
 {
     "compilerOptions": {
-        "allowSyntheticDefaultImports": true, // Handles coc type errors
         "target": "es2017",
         "module": "commonjs",
         "moduleResolution": "node",
@@ -9,7 +8,8 @@
         "declaration": true,
         "outDir": "lib",
         "sourceMap": true,
-        "composite": true
+        "composite": true,
+        "esModuleInterop": true // Handles coc type errors
     },
     "include": ["src"]
 }
