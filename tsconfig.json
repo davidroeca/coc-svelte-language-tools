@@ -1,9 +1,7 @@
 {
+    "extends": "@tsconfig/node12/tsconfig.json",
     "compilerOptions": {
-        "target": "es2017",
-        "module": "commonjs",
         "moduleResolution": "node",
-        "lib": ["es2017", "es2018"],
         "strict": true,
         "declaration": true,
         "outDir": "lib",

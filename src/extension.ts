@@ -14,13 +14,26 @@ import { activateTagClosing } from './html/autoClose';
 export function activate(context: ExtensionContext) {
     const serverModule = require.resolve('svelte-language-server/bin/server.js');
 
-    const debugOptions = { execArgv: ['--nolazy', '--inspect=6009'] };
+    const runtimeConfig = workspace.getConfiguration('svelte.language-server');
+
+    const runExecArgv: string[] = [];
+    let port = runtimeConfig.get<number>('port') ?? -1;
+    if (port < 0) {
+        port = 6009;
+    } else {
+        console.log('setting port to', port);
+        runExecArgv.push(`--inspect=${port}`);
+    }
+    const debugOptions = { execArgv: ['--nolazy', `--inspect=${port}`] };
+
     const serverOptions: ServerOptions = {
-        run: { module: serverModule, transport: TransportKind.ipc },
+        run: {
+            module: serverModule,
+            transport: TransportKind.ipc,
+            options: { execArgv: runExecArgv },
+        },
         debug: { module: serverModule, transport: TransportKind.ipc, options: debugOptions },
     };
-
-    const runtimeConfig = workspace.getConfiguration('svelte.language-server');
 
     const serverRuntime = runtimeConfig.get<string>('runtime');
     if (serverRuntime) {
@@ -68,6 +81,48 @@ export function activate(context: ExtensionContext) {
             workspace.showMessage('Svelte language server restarted.');
         }),
     );
+    // The code below is currently not implemented, because there is no coc
+    // way of handling file renames
+    /*
+    workspace.onDidRenameFiles(async (evt) => {
+        window.withProgress(
+            { location: ProgressLocation.Window, title: 'Updating Imports..' },
+            async () => {
+                const editsForFileRename = await ls.sendRequest<LSWorkspaceEdit | null>(
+                    '$/getEditsForFileRename',
+                    // Right now files is always an array with a single entry.
+                    // The signature was only designed that way to - maybe, in the future -
+                    // have the possibility to change that. If that ever does, update this.
+                    // In the meantime, just assume it's a single entry and simplify the
+                    // rest of the logic that way.
+                    {
+                        oldUri: evt.files[0].oldUri.toString(true),
+                        newUri: evt.files[0].newUri.toString(true),
+                    },
+                );
+                if (!editsForFileRename) {
+                    return;
+                }
+
+                const workspaceEdit = new WorkspaceEdit();
+                // Renaming a file should only result in edits of existing files
+                editsForFileRename.documentChanges?.filter(TextDocumentEdit.is).forEach((change) =>
+                    change.edits.forEach((edit) => {
+                        workspaceEdit.replace(
+                            Uri.parse(change.textDocument.uri),
+                            new Range(
+                                new Position(edit.range.start.line, edit.range.start.character),
+                                new Position(edit.range.end.line, edit.range.end.character),
+                            ),
+                            edit.newText,
+                        );
+                    }),
+                );
+                workspace.applyEdit(workspaceEdit);
+            },
+        );
+    });
+    */
 }
 
 function createLanguageServer(serverOptions: ServerOptions, clientOptions: LanguageClientOptions) {

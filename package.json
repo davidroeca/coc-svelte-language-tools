@@ -40,6 +40,12 @@
                     "title": "Language Server Runtime",
                     "description": "Path to the node executable to use to spawn the language server"
                 },
+                "svelte.language-server.port": {
+                    "type": "number",
+                    "title": "Language Server Port",
+                    "description": "At which port to spawn the language server. Can be used for attaching to the process for debugging / profiling. If you experience crashes due to \"port already in use\", try setting the port. -1 = default port is used.",
+                    "default": -1
+                },
                 "svelte.plugin.typescript.enable": {
                     "type": "boolean",
                     "default": true,
@@ -226,11 +232,12 @@
         ]
     },
     "devDependencies": {
+        "@tsconfig/node12": "^1.0.0",
         "@types/node": "^14.0.1",
         "coc.nvim": "^0.0.77",
         "npm-run-all": "^4.1.5",
         "rimraf": "^3.0.2",
-        "svelte-language-server": "^0.10.13",
+        "svelte-language-server": "^0.10.44",
         "typescript": "*",
         "vscode-languageserver-protocol": "^3.16.0-next.2"
     }

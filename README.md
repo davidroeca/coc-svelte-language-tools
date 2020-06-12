@@ -2,14 +2,20 @@
 
 ⚠️ _Warning_: This is currently in development, and may not work appropriately yet. Proceed at your own risk.
 
-Provides syntax highlighting and rich intellisense for Svelte components in CoC, utilising the [svelte language server](https://github.com/sveltejs/language-tools/blob/master/packages/language-server).
+Provides syntax highlighting and rich intellisense for Svelte components in CoC, utilising the [svelte language server](/packages/language-server).
+
+## Setup
+
+Do you want to use Typescript/SCSS/Less/..? See "Using with preprocessors" below.
+
+If you added `"files.associations": {"*.svelte": "html" }` to your CoC settings, remove it.
 
 ## Features
 
 -   Svelte
     -   Diagnostic messages for warnings and errors
     -   Support for svelte preprocessors that provide source maps
-    -   Svelte specific formatting (via [prettier-plugin-svelte](https://github.com/UnwrittenFun/prettier-plugin-svelte))
+    -   Svelte specific formatting (via [prettier-plugin-svelte](https://github.com/sveltejs/prettier-plugin-svelte))
 -   HTML
     -   Hover info
     -   Autocompletions
@@ -36,19 +42,19 @@ Provides syntax highlighting and rich intellisense for Svelte components in CoC,
 
 #### Language specific setup
 
--   [SCSS](docs/preprocessors/scss.md)
--   [TypeScript](docs/preprocessors/typescript.md)
+-   [SCSS/Less](/docs/preprocessors/scss.md)
+-   [TypeScript](/docs/preprocessors/typescript.md)
 
 #### Generic setup
 
-If a svelte file contains some language other than `html`, `css` or `javascript`, `coc-svelte-language-tools` needs to know how to [preprocess](https://svelte.dev/docs#svelte_preprocess) it. This can be achieved by creating a `svelte.config.js` file at the root of your project which exports a svelte options object (similar to `svelte-loader` and `rollup-plugin-svelte`).
+If a svelte file contains some language other than `html`, `css` or `javascript`, `svelte-vscode` needs to know how to [preprocess](https://svelte.dev/docs#svelte_preprocess) it. This can be achieved by creating a `svelte.config.js` file at the root of your project which exports a svelte options object (similar to `svelte-loader` and `rollup-plugin-svelte`). It's recommended to use the official [svelte-preprocess](https://github.com/sveltejs/svelte-preprocess) package which can handle many languages.
 
 ```js
 // svelte.config.js
-const preprocess = require('my-example-svelte-preprocessor');
+const sveltePreprocess = require('svelte-preprocess');
 
 module.exports = {
-    preprocess: [preprocess()],
+    preprocess: sveltePreprocess(),
     // ...other svelte options
 };
 ```
@@ -76,6 +82,14 @@ It's also necessary to add a `type="text/language-name"` or `lang="language-name
 Path to the node executable you would like to use to run the language server.
 This is useful when you depend on native modules such as node-sass as without
 this they will run in the context of vscode, meaning v8 version mismatch is likely.
+
+##### `svelte.language-server.port`
+
+At which port to spawn the language server.
+Can be used for attaching to the process for debugging / profiling.
+If you experience crashes due to "port already in use", try setting the port.
+-1 = default port is used.
+
 
 ##### `svelte.plugin.typescript.enable`
 
@@ -164,3 +178,15 @@ Enable diagnostic messages for Svelte. _Default_: `true`
 ##### `svelte.plugin.svelte.format.enable`
 
 Enable formatting for Svelte (includes css & js). _Default_: `true`
+
+##### `svelte.plugin.svelte.hover.enable`
+
+Enable hover info for Svelte (for tags like #if/#each). _Default_: `true`
+
+##### `svelte.plugin.svelte.completions.enable`
+
+Enable autocompletion for Svelte (for tags like #if/#each). _Default_: `true`
+
+##### `svelte.plugin.svelte.rename.enable`
+
+Enable rename functionality (rename svelte files or variables inside svelte files). _Default_: `true`
