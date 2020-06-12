@@ -2,7 +2,9 @@
 
 ⚠️ _Warning_: This is currently in development, and may not work appropriately yet. Proceed at your own risk.
 
-Provides syntax highlighting and rich intellisense for Svelte components in CoC, utilising the [svelte language server](/packages/language-server).
+Forked from [svelte-vscode](https://github.com/sveltejs/language-tools/tree/master/packages/svelte-vscode)
+
+Provides syntax highlighting and rich intellisense for Svelte components in CoC, utilising the [svelte language server](https://github.com/sveltejs/language-tools/tree/master/packages/language-server).
 
 ## Setup
 
