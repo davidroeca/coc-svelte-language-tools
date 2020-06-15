@@ -1,6 +1,6 @@
 # Svelte for CoC.nvim
 
-⚠️ _Warning_: This is currently in development, and may not work appropriately yet. Proceed at your own risk.
+⚠️ _Deprecation Notice_: This repo is being deprecated, in favor of a fork of the official [coc-svelte](https://github.com/coc-extensions/coc-svelte). Until [#8](https://github.com/coc-extensions/coc-svelte/pull/8) gets merged, please feel free to use [my fork of coc-svelte](https://github.com/davidroeca/coc-svelte).
 
 Forked from [svelte-vscode](https://github.com/sveltejs/language-tools/tree/master/packages/svelte-vscode)
 
